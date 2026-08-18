@@ -13,19 +13,27 @@ func commandMap(cfg *config) error {
 		url = *cfg.next
 	}
 
-	res, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer res.Body.Close()
+	var body []byte
 
-	if res.StatusCode > 299 {
-		return fmt.Errorf("bad response status: %d", res.StatusCode)
-	}
+	if val, ok := cfg.cache.Get(url); ok {
+		body = val
+	} else {
+		res, err := http.Get(url)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
 
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
+		if res.StatusCode > 299 {
+			return fmt.Errorf("bad response status: %d", res.StatusCode)
+		}
+
+		body, err = io.ReadAll(res.Body)
+		if err != nil {
+			return err
+		}
+
+		cfg.cache.Add(url, body)
 	}
 
 	var locationResp LocationAreaResponse
@@ -52,19 +60,27 @@ func commandMapb(cfg *config) error {
 
 	url := *cfg.previous
 
-	res, err := http.Get(url)
-	if err != nil {
-		return err
-	}
-	defer res.Body.Close()
+	var body []byte
 
-	if res.StatusCode > 299 {
-		return fmt.Errorf("bad response status: %d", res.StatusCode)
-	}
+	if val, ok := cfg.cache.Get(url); ok {
+		body = val
+	} else {
+		res, err := http.Get(url)
+		if err != nil {
+			return err
+		}
+		defer res.Body.Close()
 
-	body, err := io.ReadAll(res.Body)
-	if err != nil {
-		return err
+		if res.StatusCode > 299 {
+			return fmt.Errorf("bad response status: %d", res.StatusCode)
+		}
+
+		body, err = io.ReadAll(res.Body)
+		if err != nil {
+			return err
+		}
+
+		cfg.cache.Add(url, body)
 	}
 
 	var locationResp LocationAreaResponse

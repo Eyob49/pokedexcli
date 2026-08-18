@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"bufio"
+	"github.com/Eyob49/pokedexcli/internal/pokecache"
 )
 
 type cliCommand struct {
@@ -15,8 +16,9 @@ type cliCommand struct {
 
 type config struct {
 	commands map[string]cliCommand
-	next *string
+	next     *string
 	previous *string
+	cache    *pokecache.Cache
 }
 
 func commandExit(cfg *config) error {
