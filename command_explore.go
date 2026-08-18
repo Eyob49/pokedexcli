@@ -7,6 +7,8 @@ import (
 	"io"
 	"net/http"
 )
+
+
 type LocationAreaDetail struct {
 	PokemonEncounters []struct {
 		Pokemon struct {

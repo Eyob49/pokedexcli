@@ -19,6 +19,7 @@ type config struct {
 	next     *string
 	previous *string
 	cache    *pokecache.Cache
+	pokedex  map[string]Pokemon
 }
 
 func commandExit(cfg *config, args ...string) error {
@@ -53,6 +54,11 @@ func getCommands() map[string]cliCommand {
 			name:         "explore",
 			description:  "Displays a list of all the Pokémon located there",
 			callback:     commandExplore,
+		},
+		"catch": {
+			name:          "catch",
+			description:   "Catching Pokemon adds them to the user's Pokedex",
+			callback:      commandCatch,
 		},
 	}
 }
