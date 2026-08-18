@@ -7,7 +7,7 @@ import (
 	"encoding/json"
 )
 
-func commandMap(cfg *config) error {
+func commandMap(cfg *config, args ...string) error {
 	url := "https://pokeapi.co/api/v2/location-area/"
 	if cfg.next != nil {
 		url = *cfg.next
@@ -52,7 +52,7 @@ func commandMap(cfg *config) error {
 }
 
 
-func commandMapb(cfg *config) error {
+func commandMapb(cfg *config, args ...string) error {
 	if cfg.previous == nil {
 		fmt.Println("you're on the first page")
 		return nil

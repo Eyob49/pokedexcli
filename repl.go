@@ -11,7 +11,7 @@ import (
 type cliCommand struct {
 	name        string
 	description string
-	callback    func(*config) error
+	callback    func(*config, ...string) error
 }
 
 type config struct {
@@ -21,7 +21,7 @@ type config struct {
 	cache    *pokecache.Cache
 }
 
-func commandExit(cfg *config) error {
+func commandExit(cfg *config, args ...string) error {
 	fmt.Println("Closing the Pokedex... Goodbye!")
 	os.Exit(0)
 	return nil
@@ -49,10 +49,15 @@ func getCommands() map[string]cliCommand {
 			description:  "Displays the previous 20 location areas",
 			callback:     commandMapb,
 		},
+		"explore": {
+			name:         "explore",
+			description:  "Displays a list of all the Pokémon located there",
+			callback:     commandExplore,
+		},
 	}
 }
 
-func commandHelp(cfg *config) error{
+func commandHelp(cfg *config, args ...string) error{
 	fmt.Println("Welcome to the Pokedex!")
 	fmt.Println("Usage:")
 	fmt.Println()
@@ -93,7 +98,7 @@ func startRepl(cfg *config) {
 			fmt.Println("Unknown command")
 			continue
 		}
-		err := command.callback(cfg)
+		err := command.callback(cfg, cleanedInput[1:]...)
 		if err != nil{
 			fmt.Println("Err:", err)
 		}
